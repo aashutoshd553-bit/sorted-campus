@@ -78,10 +78,8 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-950">
-            <span className="flex size-7 items-center justify-center rounded bg-slate-950 text-xs font-bold text-white">
-              S
-            </span>
-            SORTED
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="SORTED" className="h-8 w-auto" />
           </Link>
 
           <div className="flex items-center gap-4 text-sm font-medium">
@@ -277,6 +275,25 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
           )}
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-slate-50 py-8 mt-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8 text-xs text-slate-500">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-slate-900">SORTED</span>
+            <span>&bull;</span>
+            <span>Campus peer-to-peer marketplace</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <Link href="/contact" className="hover:text-slate-900">Contact</Link>
+            <Link href="/privacy" className="hover:text-slate-900">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-slate-900">Terms of Service</Link>
+          </div>
+        </div>
+        <div className="mx-auto mt-4 max-w-7xl px-4 text-center text-xs text-slate-400 sm:px-6 lg:px-8">
+          Developed by Bhumika Sahu
+        </div>
+      </footer>
     </main>
   );
 }

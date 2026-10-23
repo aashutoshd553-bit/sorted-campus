@@ -26,10 +26,8 @@ export default function ForgotPasswordPage() {
     <main className="site-canvas grid min-h-screen place-items-center p-4">
       <div className="w-full max-w-sm rounded-lg border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-950">
-          <span className="flex size-7 items-center justify-center rounded bg-slate-950 text-xs font-bold text-white">
-            S
-          </span>
-          SORTED
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.jpg" alt="SORTED" className="h-8 w-auto" />
         </Link>
 
         <div className="mt-6">

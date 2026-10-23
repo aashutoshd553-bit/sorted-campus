@@ -1,12 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import {
-  BookIcon,
-  LaptopIcon,
-  BikeIcon,
-  HomeIcon,
-  CalculatorIcon,
-  FlaskIcon,
   SearchIcon,
   ArrowRightIcon,
   MapPinIcon,
@@ -18,12 +12,12 @@ import {
 export const instant = false;
 
 const categories = [
-  { icon: BookIcon, name: "Books & Notes", slug: "books-notes", description: "Textbooks, reference guides, course notes" },
-  { icon: LaptopIcon, name: "Electronics", slug: "electronics", description: "Monitors, keyboards, audio, chargers" },
-  { icon: BikeIcon, name: "Bikes & Travel", slug: "bikes-travel", description: "Campus bicycles, helmets, travel gear" },
-  { icon: HomeIcon, name: "Hostel Essentials", slug: "hostel-essentials", description: "Lamps, storage racks, kettles, organizers" },
-  { icon: CalculatorIcon, name: "Academic Tools", slug: "academic-tools", description: "Scientific calculators, drafters, geometry sets" },
-  { icon: FlaskIcon, name: "Project Kits", slug: "project-kits", description: "Arduino, Raspberry Pi, component kits" },
+  { name: "Books & Notes", slug: "books-notes", description: "Textbooks, reference guides, course notes", image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&q=80" },
+  { name: "Electronics", slug: "electronics", description: "Monitors, keyboards, audio, chargers", image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80" },
+  { name: "Bikes & Travel", slug: "bikes-travel", description: "Campus bicycles, helmets, travel gear", image: "https://images.unsplash.com/photo-1502744688674-c619d1586c9e?w=400&q=80" },
+  { name: "Hostel Essentials", slug: "hostel-essentials", description: "Lamps, storage racks, kettles, organizers", image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80" },
+  { name: "Academic Tools", slug: "academic-tools", description: "Scientific calculators, drafters, geometry sets", image: "https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=400&q=80" },
+  { name: "Project Kits", slug: "project-kits", description: "Arduino, Raspberry Pi, component kits", image: "https://images.unsplash.com/photo-1553406830-ef2513450d76?w=400&q=80" },
 ];
 
 export default async function Home() {
@@ -61,10 +55,8 @@ export default async function Home() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-950">
-              <span className="flex size-7 items-center justify-center rounded bg-slate-950 text-xs font-bold text-white">
-                S
-              </span>
-              SORTED
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.jpg" alt="SORTED" className="h-8 w-auto" />
             </Link>
 
             <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
@@ -177,23 +169,25 @@ export default async function Home() {
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => {
-            const Icon = category.icon;
             return (
               <Link
                 key={category.slug}
                 href={`/browse?category=${category.slug}`}
-                className="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-slate-400 hover:bg-slate-50"
+                className="group rounded-lg border border-slate-200 bg-white overflow-hidden transition hover:border-slate-400 hover:shadow-sm"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded border border-slate-200 bg-slate-50 text-slate-700 group-hover:border-slate-300">
-                    <Icon className="size-4" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-900 group-hover:text-blue-600">
-                      {category.name}
-                    </h3>
-                    <p className="text-xs text-slate-500">{category.description}</p>
-                  </div>
+                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="size-full object-cover transition-transform duration-200 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-sm font-semibold text-slate-900 group-hover:text-blue-600">
+                    {category.name}
+                  </h3>
+                  <p className="mt-1 text-xs text-slate-500">{category.description}</p>
                 </div>
               </Link>
             );
@@ -375,6 +369,9 @@ export default async function Home() {
             <Link href="/account" className="hover:text-slate-900">
               Account
             </Link>
+            <Link href="/contact" className="hover:text-slate-900">
+              Contact
+            </Link>
             <Link href="/privacy" className="hover:text-slate-900">
               Privacy Policy
             </Link>
@@ -382,6 +379,9 @@ export default async function Home() {
               Terms of Service
             </Link>
           </div>
+        </div>
+        <div className="mx-auto mt-4 max-w-7xl px-4 text-center text-xs text-slate-400 sm:px-6 lg:px-8">
+          Developed by Bhumika Sahu
         </div>
       </footer>
     </main>

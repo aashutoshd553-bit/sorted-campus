@@ -44,10 +44,8 @@ export default async function SellPage() {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-950">
-            <span className="flex size-7 items-center justify-center rounded bg-slate-950 text-xs font-bold text-white">
-              S
-            </span>
-            SORTED
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="SORTED" className="h-8 w-auto" />
           </Link>
 
           <div className="flex items-center gap-4 text-sm font-medium">
@@ -77,6 +75,16 @@ export default async function SellPage() {
           defaultCollegeId={profile?.college_id || null}
         />
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-slate-50 py-6 mt-4">
+        <div className="mx-auto max-w-4xl px-4 text-center text-xs text-slate-400 sm:px-6">
+          <Link href="/contact" className="hover:text-slate-600 mr-4">Contact</Link>
+          <Link href="/privacy" className="hover:text-slate-600 mr-4">Privacy Policy</Link>
+          <Link href="/terms" className="hover:text-slate-600">Terms of Service</Link>
+          <p className="mt-2">Developed by Bhumika Sahu</p>
+        </div>
+      </footer>
     </main>
   );
 }
