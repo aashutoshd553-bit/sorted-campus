@@ -12,9 +12,9 @@ function SubmitButton() {
   return (
     <button
       disabled={pending}
-      className="mt-2 w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+      className="mt-2 w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {pending ? "Sending link…" : "Send reset link"}
+      {pending ? "Sending link..." : "Send Reset Link"}
     </button>
   );
 }
@@ -23,50 +23,51 @@ export default function ForgotPasswordPage() {
   const [state, formAction] = useActionState(requestPasswordReset, initialState);
 
   return (
-    <main className="site-canvas grid min-h-screen place-items-center p-5">
-      <div className="glass w-full max-w-md rounded-3xl p-7 shadow-2xl shadow-blue-900/10 sm:p-9">
-        <Link href="/" className="flex items-center gap-2 text-xl font-extrabold tracking-[-.06em] text-slate-950">
-          <span className="grid size-8 place-items-center rounded-xl bg-blue-600 text-sm text-white">S</span>
+    <main className="site-canvas grid min-h-screen place-items-center p-4">
+      <div className="w-full max-w-sm rounded-lg border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+        <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-950">
+          <span className="flex size-7 items-center justify-center rounded bg-slate-950 text-xs font-bold text-white">
+            S
+          </span>
           SORTED
         </Link>
 
-        <div className="mt-9">
-          <p className="text-sm font-bold text-blue-600">Password recovery</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-950">Forgot password?</h1>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            Enter your registered college email and we&apos;ll send you a link to reset your password.
+        <div className="mt-6">
+          <h1 className="text-xl font-bold tracking-tight text-slate-950">Reset Password</h1>
+          <p className="mt-1 text-xs text-slate-500">
+            Enter your college email address to receive recovery instructions.
           </p>
         </div>
 
-        <form action={formAction} className="mt-8 space-y-4">
-          <label className="block text-sm font-semibold text-slate-700">
-            College email
+        <form action={formAction} className="mt-6 space-y-4">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+            College Email
             <input
               name="email"
               required
               type="email"
               autoComplete="email"
-              className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white/70 px-3.5 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+              className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
               placeholder="you@college.edu"
             />
           </label>
 
           {state.error && (
-            <p role="alert" className="rounded-xl bg-red-50 px-3 py-2.5 text-sm font-medium text-red-700">
+            <p role="alert" className="rounded-md border border-red-200 bg-red-50 p-2.5 text-xs font-semibold text-red-700">
               {state.error}
             </p>
           )}
           {state.success && (
-            <p role="status" className="rounded-xl bg-emerald-50 px-3 py-2.5 text-sm font-medium text-emerald-700">
+            <p role="status" className="rounded-md border border-emerald-200 bg-emerald-50 p-2.5 text-xs font-semibold text-emerald-700">
               {state.success}
             </p>
           )}
 
           <SubmitButton />
 
-          <p className="text-center text-sm text-slate-500">
+          <p className="text-center text-xs text-slate-500 pt-2">
             Remembered your password?{" "}
-            <Link className="font-bold text-blue-600 hover:text-blue-700" href="/login">
+            <Link className="font-semibold text-blue-600 hover:text-blue-800" href="/login">
               Back to log in
             </Link>
           </p>

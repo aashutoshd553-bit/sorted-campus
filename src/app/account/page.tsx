@@ -4,6 +4,7 @@ import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/(auth)/actions";
 import { ProfileForm } from "./profile-form";
+import { BoxIcon, MapPinIcon, PlusIcon } from "@/components/ui/icons";
 
 export const instant = false;
 
@@ -49,28 +50,28 @@ export default async function AccountPage() {
     .toUpperCase();
 
   return (
-    <main className="site-canvas min-h-screen pb-16">
-      {/* Navbar */}
-      <header className="px-4 pt-4 sm:px-8">
-        <div className="glass mx-auto flex h-16 max-w-5xl items-center justify-between rounded-2xl px-5">
-          <Link href="/" className="flex items-center gap-2.5 text-xl font-extrabold tracking-[-.06em] text-slate-950">
-            <span className="grid size-8 place-items-center rounded-xl bg-blue-600 text-sm text-white shadow-lg shadow-blue-500/25">
+    <main className="site-canvas min-h-screen">
+      {/* Header */}
+      <header className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
+          <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-950">
+            <span className="flex size-7 items-center justify-center rounded bg-slate-950 text-xs font-bold text-white">
               S
             </span>
             SORTED
           </Link>
 
-          <div className="flex items-center gap-4 text-sm font-semibold">
-            <Link href="/browse" className="text-slate-600 hover:text-blue-600">
+          <div className="flex items-center gap-4 text-sm font-medium">
+            <Link href="/browse" className="text-slate-600 hover:text-slate-950">
               Browse
             </Link>
-            <Link href="/sell" className="text-slate-600 hover:text-blue-600">
-              + Sell Item
+            <Link href="/sell" className="text-slate-600 hover:text-slate-950">
+              Post Listing
             </Link>
             <form action={signOut}>
               <button
                 type="submit"
-                className="rounded-xl border border-slate-200 bg-white/80 px-3.5 py-2 text-xs font-bold text-red-600 transition hover:bg-red-50 hover:border-red-200"
+                className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
               >
                 Log out
               </button>
@@ -80,53 +81,52 @@ export default async function AccountPage() {
       </header>
 
       {/* Main Content */}
-      <div className="mx-auto mt-8 max-w-5xl px-4 sm:px-8">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Left Column: User Card */}
           <div className="space-y-6 lg:col-span-1">
-            <div className="glass rounded-3xl p-6 text-center">
-              <div className="mx-auto grid size-20 place-items-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-2xl font-black text-white shadow-xl shadow-blue-500/20">
+            <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm text-center">
+              <div className="mx-auto flex size-16 items-center justify-center rounded-lg bg-slate-950 text-xl font-bold text-white">
                 {userInitials}
               </div>
-              <h2 className="mt-4 text-xl font-bold text-slate-900">{fullName}</h2>
+              <h2 className="mt-3 text-lg font-bold text-slate-900">{fullName}</h2>
               <p className="text-xs text-slate-500">{user.email}</p>
 
               <div className="mt-4 flex flex-wrap justify-center gap-2">
-                <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                <span className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-700">
                   Campus Member
                 </span>
                 {profile?.city && (
-                  <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
-                    📍 {profile.city}
+                  <span className="flex items-center gap-1 rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-700">
+                    <MapPinIcon className="size-3" /> {profile.city}
                   </span>
                 )}
               </div>
 
-              <div className="mt-6 border-t border-slate-200/60 pt-4 text-left">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Your College</p>
+              <div className="mt-6 border-t border-slate-100 pt-4 text-left">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">College Affiliation</p>
                 <p className="mt-1 text-sm font-medium text-slate-800">
-                  {profile?.colleges?.name || "Not selected yet"}
+                  {profile?.colleges?.name || "Not specified"}
                 </p>
               </div>
 
-              <div className="mt-4 border-t border-slate-200/60 pt-4 text-left">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Listings</p>
-                <p className="mt-1 text-2xl font-bold text-slate-900">{listingCount}</p>
+              <div className="mt-4 border-t border-slate-100 pt-4 text-left">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Active Listings</p>
+                <p className="mt-1 text-xl font-bold text-slate-900">{listingCount}</p>
               </div>
             </div>
 
             {/* Quick Action: Sell */}
-            <div className="glass-soft rounded-3xl border border-blue-200/60 bg-gradient-to-br from-blue-50/50 to-indigo-50/30 p-6">
-              <span className="text-3xl">📦</span>
-              <h3 className="mt-3 text-base font-bold text-slate-900">Have something to sell?</h3>
+            <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+              <h3 className="text-sm font-bold text-slate-900">Have items to pass on?</h3>
               <p className="mt-1 text-xs text-slate-600">
-                Turn your textbooks, tech, or hostel items into cash within your campus.
+                Post textbooks, calculators, or hostel gear to sell on campus.
               </p>
               <Link
                 href="/sell"
-                className="mt-4 inline-block w-full rounded-xl bg-blue-600 px-4 py-2.5 text-center text-xs font-bold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-700"
+                className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-blue-600 px-4 py-2 text-center text-xs font-semibold text-white hover:bg-blue-700"
               >
-                + Post a listing now
+                <PlusIcon className="size-3.5" /> Post new listing
               </Link>
             </div>
           </div>
@@ -134,12 +134,11 @@ export default async function AccountPage() {
           {/* Right Column: Edit Profile & Activity */}
           <div className="space-y-6 lg:col-span-2">
             {/* Edit Profile Card */}
-            <div className="glass rounded-3xl p-6 sm:p-8" id="profile">
-              <div className="mb-6 border-b border-slate-200/60 pb-4">
-                <p className="text-xs font-bold uppercase tracking-wider text-blue-600">Account Details</p>
-                <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-950">Profile Settings</h1>
+            <div className="rounded-lg border border-slate-200 bg-white p-6 sm:p-8 shadow-sm" id="profile">
+              <div className="mb-6 border-b border-slate-100 pb-4">
+                <h1 className="text-lg font-bold tracking-tight text-slate-950">Profile Settings</h1>
                 <p className="mt-1 text-xs text-slate-500">
-                  Update your display name, location, and campus details.
+                  Update your contact name, location, and campus details.
                 </p>
               </div>
 
@@ -152,17 +151,17 @@ export default async function AccountPage() {
             </div>
 
             {/* My Listings Card */}
-            <div className="glass rounded-3xl p-6 sm:p-8">
-              <div className="flex items-center justify-between border-b border-slate-200/60 pb-4">
+            <div className="rounded-lg border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-950">My Listings ({listingCount})</h2>
-                  <p className="text-xs text-slate-500">Items you have listed on SORTED.</p>
+                  <h2 className="text-base font-bold text-slate-950">My Listings ({listingCount})</h2>
+                  <p className="mt-0.5 text-xs text-slate-500">Active items posted under your account.</p>
                 </div>
                 <Link
                   href="/sell"
-                  className="rounded-xl bg-slate-950 px-3.5 py-2 text-xs font-bold text-white hover:bg-blue-600"
+                  className="rounded-md bg-slate-950 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
                 >
-                  + Add Item
+                  Post Item
                 </Link>
               </div>
 
@@ -178,32 +177,34 @@ export default async function AccountPage() {
                     }
 
                     return (
-                      <div key={item.id} className="flex items-center justify-between gap-4 py-4">
+                      <div key={item.id} className="flex items-center justify-between gap-4 py-3.5">
                         <div className="flex items-center gap-3">
-                          <div className="size-14 shrink-0 overflow-hidden rounded-xl bg-slate-100">
+                          <div className="size-12 shrink-0 overflow-hidden rounded border border-slate-200 bg-slate-100">
                             {thumb ? (
                               // eslint-disable-next-line @next/next/no-img-element
                               <img src={thumb} alt={item.title} className="size-full object-cover" />
                             ) : (
-                              <div className="grid size-full place-items-center text-xl">📦</div>
+                              <div className="flex size-full items-center justify-center text-slate-400">
+                                <BoxIcon className="size-6" />
+                              </div>
                             )}
                           </div>
                           <div>
                             <Link
                               href={`/listings/${item.id}`}
-                              className="font-bold text-slate-900 hover:text-blue-600"
+                              className="text-sm font-semibold text-slate-900 hover:text-blue-600"
                             >
                               {item.title}
                             </Link>
-                            <p className="text-xs font-semibold text-blue-600">
+                            <p className="text-xs font-bold text-slate-950">
                               {item.price_inr === 0 ? "FREE" : `₹${item.price_inr.toLocaleString("en-IN")}`}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                           <span
-                            className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                            className={`rounded px-2 py-0.5 text-[11px] font-semibold ${
                               item.status === "sold"
                                 ? "bg-amber-100 text-amber-800"
                                 : "bg-emerald-100 text-emerald-800"
@@ -213,7 +214,7 @@ export default async function AccountPage() {
                           </span>
                           <Link
                             href={`/listings/${item.id}`}
-                            className="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                            className="rounded border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
                           >
                             Manage
                           </Link>
@@ -223,17 +224,17 @@ export default async function AccountPage() {
                   })}
                 </div>
               ) : (
-                <div className="mt-6 rounded-2xl border border-dashed border-slate-200 bg-white/40 p-8 text-center">
-                  <p className="text-3xl">🛍️</p>
-                  <p className="mt-2 text-sm font-semibold text-slate-700">No active listings yet</p>
-                  <p className="mt-1 text-xs text-slate-500">
-                    When you list items for sale, they will show up here.
+                <div className="mt-6 rounded-lg border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
+                  <BoxIcon className="mx-auto size-8 text-slate-400" />
+                  <p className="mt-2 text-xs font-semibold text-slate-700">No active listings</p>
+                  <p className="mt-0.5 text-xs text-slate-500">
+                    Your listed items will appear here once published.
                   </p>
                   <Link
                     href="/sell"
-                    className="mt-4 inline-block rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-md hover:bg-blue-700"
+                    className="mt-4 inline-flex rounded-md bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
                   >
-                    Post your first item
+                    Post an item
                   </Link>
                 </div>
               )}

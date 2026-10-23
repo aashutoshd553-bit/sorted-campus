@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { markListingStatus, deleteListing, toggleWishlist } from "@/app/listings/actions";
+import { MailIcon } from "@/components/ui/icons";
 
 interface ListingActionsProps {
   listingId: string;
@@ -38,22 +39,22 @@ export function ListingActions({
     <div className="space-y-4">
       {/* Seller controls */}
       {isOwner ? (
-        <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-600">
             Seller Management Controls
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {status === "active" ? (
               <button
                 onClick={() => handleStatusChange("sold")}
-                className="rounded-xl bg-amber-500 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-amber-600"
+                className="rounded-md bg-amber-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-amber-700"
               >
                 Mark as Sold
               </button>
             ) : (
               <button
                 onClick={() => handleStatusChange("active")}
-                className="rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700"
+                className="rounded-md bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
               >
                 Relist as Active
               </button>
@@ -62,9 +63,9 @@ export function ListingActions({
             <button
               disabled={isDeleting}
               onClick={handleDelete}
-              className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-bold text-red-600 transition hover:bg-red-100 disabled:opacity-60"
+              className="rounded-md border border-red-300 bg-white px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-60"
             >
-              {isDeleting ? "Deleting…" : "Delete listing"}
+              {isDeleting ? "Deleting..." : "Delete Listing"}
             </button>
           </div>
         </div>
@@ -73,52 +74,52 @@ export function ListingActions({
         <div className="flex flex-col gap-3 sm:flex-row">
           <button
             onClick={() => setShowContact(true)}
-            className="flex-1 rounded-2xl bg-blue-600 px-6 py-4 text-center text-sm font-bold text-white shadow-xl shadow-blue-500/25 transition hover:bg-blue-700"
+            className="flex flex-1 items-center justify-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
           >
-            💬 Contact Seller ({sellerName})
+            <MailIcon className="size-4" /> Contact Seller ({sellerName})
           </button>
 
           <button
             onClick={() => toggleWishlist(listingId)}
-            className={`rounded-2xl border px-5 py-4 text-sm font-bold transition ${
+            className={`rounded-md border px-4 py-3 text-sm font-semibold transition ${
               isSaved
-                ? "border-red-200 bg-red-50 text-red-600"
-                : "border-slate-200 bg-white/80 text-slate-700 hover:bg-white"
+                ? "border-red-300 bg-red-50 text-red-700"
+                : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
             }`}
           >
-            {isSaved ? "❤️ Saved" : "♡ Save"}
+            {isSaved ? "Saved" : "Save Item"}
           </button>
         </div>
       )}
 
       {/* Contact modal */}
       {showContact && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4 backdrop-blur-sm">
-          <div className="glass w-full max-w-md rounded-3xl p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-slate-900">Contact {sellerName}</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4">
+          <div className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 shadow-xl">
+            <h3 className="text-base font-bold text-slate-900">Contact {sellerName}</h3>
             <p className="mt-1 text-xs text-slate-500">
-              Message the student directly to negotiate or arrange a meetup on campus.
+              Arrange an in-person campus handover in a public area.
             </p>
 
-            <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-xs font-bold uppercase text-slate-400">Seller Email</p>
-              <p className="mt-1 font-mono text-sm font-semibold text-blue-600">
-                {sellerEmail || "Available via campus messaging"}
+            <div className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-3">
+              <p className="text-xs font-medium uppercase text-slate-500">Verified Email</p>
+              <p className="mt-1 font-mono text-sm font-semibold text-slate-900">
+                {sellerEmail || "Available on request via campus directory"}
               </p>
             </div>
 
-            <div className="mt-4 space-y-2">
+            <div className="mt-5 space-y-2">
               {sellerEmail && (
                 <a
-                  href={`mailto:${sellerEmail}?subject=Interested in your SORTED listing`}
-                  className="block w-full rounded-xl bg-blue-600 py-3 text-center text-xs font-bold text-white hover:bg-blue-700"
+                  href={`mailto:${sellerEmail}?subject=Regarding your listing on SORTED`}
+                  className="block w-full rounded-md bg-blue-600 py-2.5 text-center text-xs font-semibold text-white hover:bg-blue-700"
                 >
-                  Open in Mail app ✉️
+                  Send Email
                 </a>
               )}
               <button
                 onClick={() => setShowContact(false)}
-                className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
+                className="w-full rounded-md border border-slate-300 bg-white py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
               >
                 Close
               </button>

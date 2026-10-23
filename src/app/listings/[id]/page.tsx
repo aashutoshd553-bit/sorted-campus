@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { ListingActions } from "./listing-actions";
+import { ShieldCheckIcon, MapPinIcon, BoxIcon, ArrowRightIcon } from "@/components/ui/icons";
 
 export const instant = false;
 
@@ -74,114 +75,118 @@ export default async function ListingPage({ params }: ListingPageProps) {
   }
 
   return (
-    <main className="site-canvas min-h-screen pb-16">
+    <main className="site-canvas min-h-screen">
       {/* Header */}
-      <header className="px-4 pt-4 sm:px-8">
-        <div className="glass mx-auto flex h-16 max-w-5xl items-center justify-between rounded-2xl px-5">
-          <Link href="/" className="flex items-center gap-2.5 text-xl font-extrabold tracking-[-.06em] text-slate-950">
-            <span className="grid size-8 place-items-center rounded-xl bg-blue-600 text-sm text-white shadow-lg shadow-blue-500/25">
+      <header className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
+          <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-950">
+            <span className="flex size-7 items-center justify-center rounded bg-slate-950 text-xs font-bold text-white">
               S
             </span>
             SORTED
           </Link>
 
-          <div className="flex items-center gap-4 text-sm font-semibold">
-            <Link href="/browse" className="text-slate-600 hover:text-blue-600">
-              ← Browse all
+          <div className="flex items-center gap-4 text-sm font-medium">
+            <Link href="/browse" className="text-slate-600 hover:text-slate-950">
+              Browse Catalog
             </Link>
             <Link
               href="/sell"
-              className="rounded-xl bg-slate-950 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-blue-600"
+              className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
             >
-              Sell an item
+              Post Listing
             </Link>
           </div>
         </div>
       </header>
 
       {/* Main Details View */}
-      <div className="mx-auto mt-8 max-w-5xl px-4 sm:px-8">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
         <div className="grid gap-8 lg:grid-cols-12">
-          {/* Left Column: Image & Badges (5 cols) */}
+          {/* Left Column: Image (5 cols) */}
           <div className="space-y-4 lg:col-span-5">
-            <div className="glass relative overflow-hidden rounded-3xl p-3">
+            <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white p-2">
               {imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={imageUrl}
                   alt={listing.title}
-                  className="aspect-square w-full rounded-2xl object-cover shadow-sm"
+                  className="aspect-square w-full rounded object-cover"
                 />
               ) : (
-                <div className="grid aspect-square w-full place-items-center rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 text-7xl shadow-inner">
-                  📦
+                <div className="flex aspect-square w-full items-center justify-center rounded bg-slate-100 text-slate-300">
+                  <BoxIcon className="size-16" />
                 </div>
               )}
 
               {/* Status Ribbon */}
               {listing.status === "sold" && (
-                <div className="absolute right-6 top-6 rounded-full bg-amber-500 px-3.5 py-1 text-xs font-bold text-white shadow-lg">
+                <div className="absolute right-4 top-4 rounded bg-amber-600 px-3 py-1 text-xs font-bold text-white shadow-sm">
                   Sold Out
                 </div>
               )}
             </div>
 
-            {/* Quick Specs Pill Box */}
-            <div className="glass rounded-2xl p-4">
-              <div className="grid grid-cols-2 gap-3 text-center text-xs font-semibold">
-                <div className="rounded-xl bg-blue-50 p-3 text-blue-700">
-                  <p className="text-[10px] uppercase text-blue-500">Condition</p>
-                  <p className="mt-0.5 font-bold">{conditionLabel}</p>
+            {/* Quick Specs Box */}
+            <div className="rounded-lg border border-slate-200 bg-white p-4">
+              <div className="grid grid-cols-2 gap-3 text-center text-xs">
+                <div className="rounded border border-slate-200 bg-slate-50 p-2.5">
+                  <p className="text-[10px] font-semibold uppercase text-slate-500">Condition</p>
+                  <p className="mt-0.5 font-bold text-slate-900">{conditionLabel}</p>
                 </div>
-                <div className="rounded-xl bg-slate-100 p-3 text-slate-700">
-                  <p className="text-[10px] uppercase text-slate-500">Category</p>
-                  <p className="mt-0.5 font-bold">{categoryName || "General"}</p>
+                <div className="rounded border border-slate-200 bg-slate-50 p-2.5">
+                  <p className="text-[10px] font-semibold uppercase text-slate-500">Category</p>
+                  <p className="mt-0.5 font-bold text-slate-900">{categoryName || "General"}</p>
                 </div>
               </div>
             </div>
 
             {/* Campus Safety Notice */}
-            <div className="rounded-2xl border border-blue-200/60 bg-blue-50/50 p-4 text-xs text-slate-600">
-              <p className="font-bold text-blue-900">🛡️ Campus Safety Tip</p>
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-xs text-slate-600">
+              <div className="flex items-center gap-1.5 font-semibold text-slate-900">
+                <ShieldCheckIcon className="size-4 text-slate-700" />
+                Campus Handover Protocol
+              </div>
               <ul className="mt-2 list-inside list-disc space-y-1 text-slate-600">
-                <li>Meet in public campus areas (library, cafeteria).</li>
-                <li>Inspect and verify item before making payment.</li>
+                <li>Meet in public campus areas during daylight hours.</li>
+                <li>Verify item functionality before making payment.</li>
+                <li>Never transfer advance deposits or holding fees.</li>
               </ul>
             </div>
           </div>
 
           {/* Right Column: Title, Price, Description, Actions (7 cols) */}
           <div className="space-y-6 lg:col-span-7">
-            <div className="glass rounded-3xl p-6 sm:p-8">
+            <div className="rounded-lg border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+                <span className="rounded border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700">
                   {categoryName || "Marketplace"}
                 </span>
                 {collegeName && (
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                    🎓 {collegeName}
+                  <span className="flex items-center gap-1 rounded border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700">
+                    <MapPinIcon className="size-3" /> {collegeName}
                   </span>
                 )}
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                  📍 {listing.city}
+                <span className="rounded border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700">
+                  {listing.city}
                 </span>
               </div>
 
-              <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">
+              <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
                 {listing.title}
               </h1>
 
               <div className="mt-4 flex items-baseline gap-3">
-                <span className="text-3xl font-extrabold text-blue-600 sm:text-4xl">
+                <span className="text-3xl font-extrabold text-slate-950">
                   {listing.price_inr === 0 ? "FREE" : `₹${listing.price_inr.toLocaleString("en-IN")}`}
                 </span>
                 {listing.price_inr === 0 && (
-                  <span className="text-xs font-bold uppercase text-emerald-600">Pass-forward Gift</span>
+                  <span className="text-xs font-semibold text-emerald-700">No cost item</span>
                 )}
               </div>
 
               {/* Action Buttons */}
-              <div className="mt-6 border-t border-slate-200/60 pt-6">
+              <div className="mt-6 border-t border-slate-100 pt-6">
                 <ListingActions
                   listingId={listing.id}
                   isOwner={isOwner}
@@ -192,9 +197,9 @@ export default async function ListingPage({ params }: ListingPageProps) {
               </div>
 
               {/* Description */}
-              <div className="mt-8 border-t border-slate-200/60 pt-6">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">
-                  About this item
+              <div className="mt-8 border-t border-slate-100 pt-6">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Item Details
                 </h3>
                 <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-slate-700">
                   {listing.description}
@@ -202,20 +207,20 @@ export default async function ListingPage({ params }: ListingPageProps) {
               </div>
 
               {/* Seller details */}
-              <div className="mt-8 border-t border-slate-200/60 pt-6">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">
-                  Seller Information
+              <div className="mt-8 border-t border-slate-100 pt-6">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Listed By
                 </h3>
                 <div className="mt-3 flex items-center gap-3">
-                  <div className="grid size-12 place-items-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 font-bold text-white shadow-md">
+                  <div className="flex size-10 items-center justify-center rounded bg-slate-950 text-sm font-bold text-white">
                     {(seller?.full_name || "S")[0]}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-slate-900">
-                      {seller?.full_name || "Campus Student"}
+                    <p className="text-sm font-semibold text-slate-900">
+                      {seller?.full_name || "Student Seller"}
                     </p>
                     <p className="text-xs text-slate-500">
-                      Student seller in {listing.city}
+                      Campus student in {listing.city}
                     </p>
                   </div>
                 </div>

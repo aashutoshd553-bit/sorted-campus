@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { SearchIcon, MapPinIcon, BoxIcon, PlusIcon } from "@/components/ui/icons";
 
 export const instant = false;
 
@@ -22,7 +23,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Fetch categories and colleges for filter chips
+  // Fetch categories and colleges for filters
   const [{ data: categories }, { data: colleges }] = await Promise.all([
     supabase.from("categories").select("id, name, slug").eq("is_active", true).order("sort_order"),
     supabase.from("colleges").select("id, name, city").order("name"),
@@ -55,7 +56,6 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
   }
 
   if (category) {
-    // Check if category is a UUID or slug
     const matchedCategory = categories?.find((c) => c.slug === category || c.id === category);
     if (matchedCategory) {
       query = query.eq("category_id", matchedCategory.id);
@@ -73,76 +73,81 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
   const { data: listings } = await query;
 
   return (
-    <main className="site-canvas min-h-screen pb-16">
+    <main className="site-canvas min-h-screen">
       {/* Header */}
-      <header className="px-4 pt-4 sm:px-8">
-        <div className="glass mx-auto flex h-16 max-w-7xl items-center justify-between rounded-2xl px-5">
-          <Link href="/" className="flex items-center gap-2.5 text-xl font-extrabold tracking-[-.06em] text-slate-950">
-            <span className="grid size-8 place-items-center rounded-xl bg-blue-600 text-sm text-white shadow-lg shadow-blue-500/25">
+      <header className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-950">
+            <span className="flex size-7 items-center justify-center rounded bg-slate-950 text-xs font-bold text-white">
               S
             </span>
             SORTED
           </Link>
 
-          <div className="flex items-center gap-4 text-sm font-semibold">
+          <div className="flex items-center gap-4 text-sm font-medium">
+            <Link href="/" className="text-slate-600 hover:text-slate-950">
+              Home
+            </Link>
             {user ? (
-              <Link href="/account" className="text-slate-600 hover:text-blue-600">
+              <Link href="/account" className="text-slate-600 hover:text-slate-950">
                 My Account
               </Link>
             ) : (
-              <Link href="/login" className="text-slate-600 hover:text-blue-600">
+              <Link href="/login" className="text-slate-600 hover:text-slate-950">
                 Log in
               </Link>
             )}
             <Link
               href="/sell"
-              className="rounded-xl bg-slate-950 px-4 py-2 text-xs font-bold text-white transition hover:bg-blue-600"
+              className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
             >
-              Sell an item
+              Post Listing
             </Link>
           </div>
         </div>
       </header>
 
-      {/* Main Browse Container */}
-      <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-8">
-        {/* Search & Filter Header */}
-        <div className="glass rounded-3xl p-6 sm:p-8">
+      {/* Main Container */}
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Search and Filters Header */}
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-blue-600">
-                Marketplace Discovery
-              </p>
-              <h1 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
-                Browse Campus Listings
+              <h1 className="text-xl font-bold tracking-tight text-slate-950">
+                Campus Marketplace Catalog
               </h1>
+              <p className="mt-1 text-xs text-slate-500">
+                Find textbooks, lab gear, and accessories available on campus.
+              </p>
             </div>
 
-            {/* Search form */}
             <form action="/browse" method="GET" className="flex w-full max-w-md items-center gap-2">
-              <input
-                name="q"
-                defaultValue={q || ""}
-                placeholder="Search calculators, books, cycles..."
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-              />
+              <div className="flex flex-1 items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-400 focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+                <SearchIcon className="size-4 shrink-0" />
+                <input
+                  name="q"
+                  defaultValue={q || ""}
+                  placeholder="Filter by keyword..."
+                  className="w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
+                />
+              </div>
               <button
                 type="submit"
-                className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-blue-700"
+                className="rounded-md bg-slate-950 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-800"
               >
                 Search
               </button>
             </form>
           </div>
 
-          {/* Filter Chips */}
-          <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-slate-200/60 pt-4 text-xs font-semibold">
-            <span className="text-slate-400">Categories:</span>
+          {/* Category Filter Badges */}
+          <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4 text-xs font-medium">
+            <span className="text-slate-500">Categories:</span>
             <Link
               href="/browse"
-              className={`rounded-full px-3 py-1 transition ${
+              className={`rounded px-2.5 py-1 transition ${
                 !category
-                  ? "bg-blue-600 text-white"
+                  ? "bg-slate-900 text-white font-semibold"
                   : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
@@ -152,9 +157,9 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
               <Link
                 key={cat.id}
                 href={`/browse?category=${cat.slug}${q ? `&q=${encodeURIComponent(q)}` : ""}`}
-                className={`rounded-full px-3 py-1 transition ${
+                className={`rounded px-2.5 py-1 transition ${
                   category === cat.slug || category === cat.id
-                    ? "bg-blue-600 text-white"
+                    ? "bg-slate-900 text-white font-semibold"
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                 }`}
               >
@@ -164,16 +169,16 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
           </div>
         </div>
 
-        {/* Listings Grid */}
+        {/* Listings Display */}
         <div className="mt-8">
           <div className="mb-4 flex items-center justify-between text-xs text-slate-500">
             <span>
-              Showing <strong>{listings?.length || 0}</strong> items available
+              Total results: <strong>{listings?.length || 0}</strong> active items
             </span>
             {q && (
               <span>
-                Results for &ldquo;<strong>{q}</strong>&rdquo;{" "}
-                <Link href="/browse" className="text-blue-600 underline">
+                Search filter: &ldquo;{q}&rdquo;{" "}
+                <Link href="/browse" className="text-blue-600 hover:underline">
                   Clear
                 </Link>
               </span>
@@ -209,23 +214,23 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
                   <Link
                     key={item.id}
                     href={`/listings/${item.id}`}
-                    className="glass lift group flex flex-col overflow-hidden rounded-3xl"
+                    className="group flex flex-col rounded-lg border border-slate-200 bg-white overflow-hidden transition hover:border-slate-400"
                   >
-                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                    <div className="relative aspect-[4/3] w-full bg-slate-100">
                       {thumb ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={thumb}
                           alt={item.title}
-                          className="size-full object-cover transition duration-300 group-hover:scale-105"
+                          className="size-full object-cover"
                         />
                       ) : (
-                        <div className="grid size-full place-items-center bg-gradient-to-br from-blue-50 to-indigo-50 text-5xl">
-                          📦
+                        <div className="flex size-full items-center justify-center text-slate-300">
+                          <BoxIcon className="size-10" />
                         </div>
                       )}
 
-                      <span className="absolute bottom-2.5 left-2.5 rounded-full bg-white/90 px-2 py-0.5 text-[11px] font-bold text-slate-700 shadow-sm backdrop-blur-sm">
+                      <span className="absolute bottom-2 left-2 rounded bg-white/95 px-2 py-0.5 text-[10px] font-semibold text-slate-800 border border-slate-200">
                         {condLabel}
                       </span>
                     </div>
@@ -234,17 +239,18 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
                       <p className="text-[11px] font-semibold text-blue-600">
                         {categoryName || "General"}
                       </p>
-                      <h3 className="mt-1 line-clamp-1 text-sm font-bold text-slate-900 group-hover:text-blue-600">
+                      <h3 className="mt-1 line-clamp-1 text-sm font-semibold text-slate-900 group-hover:text-blue-600">
                         {item.title}
                       </h3>
 
-                      <p className="mt-2 text-lg font-black text-slate-950">
+                      <p className="mt-2 text-base font-bold text-slate-950">
                         {item.price_inr === 0 ? "FREE" : `₹${item.price_inr.toLocaleString("en-IN")}`}
                       </p>
 
-                      <div className="mt-auto border-t border-slate-200/60 pt-3 text-[11px] font-medium text-slate-500">
-                        <p className="line-clamp-1">
-                          {collegeName ? `🎓 ${collegeName}` : `📍 ${item.city}`}
+                      <div className="mt-auto border-t border-slate-100 pt-3 text-[11px] text-slate-500">
+                        <p className="line-clamp-1 flex items-center gap-1">
+                          <MapPinIcon className="size-3 shrink-0" />
+                          {collegeName || item.city}
                         </p>
                       </div>
                     </div>
@@ -253,18 +259,18 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
               })}
             </div>
           ) : (
-            <div className="glass rounded-3xl p-12 text-center">
-              <span className="text-5xl">🔍</span>
-              <h2 className="mt-4 text-lg font-bold text-slate-900">No listings found</h2>
+            <div className="rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center">
+              <BoxIcon className="mx-auto size-10 text-slate-400" />
+              <h2 className="mt-3 text-sm font-semibold text-slate-900">No items match this search</h2>
               <p className="mt-1 text-xs text-slate-500">
-                Try searching with another keyword or be the first to list an item in this category!
+                Try searching with another keyword or post an item in this category.
               </p>
-              <div className="mt-6">
+              <div className="mt-4">
                 <Link
                   href="/sell"
-                  className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-700"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-blue-700"
                 >
-                  + Sell an item now
+                  <PlusIcon className="size-3.5" /> Post an item
                 </Link>
               </div>
             </div>

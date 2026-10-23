@@ -13,17 +13,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SORTED — Campus marketplace",
-  description: "Buy and sell useful things within your student community.",
+  title: "SORTED | Campus Marketplace",
+  description: "Buy and sell second-hand textbooks, electronics, and study essentials directly with verified students on campus.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">{children}</body>
     </html>
   );
 }

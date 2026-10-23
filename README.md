@@ -1,31 +1,55 @@
-# SORTED
+# SORTED | Campus Marketplace
 
-SORTED is a campus marketplace for students to buy and sell useful pre-loved items within their college communities.
+SORTED is a direct student-to-student peer marketplace designed for college communities to buy and sell textbooks, electronics, academic equipment, and hostel essentials safely on campus.
 
-## Local setup
+## Features
 
-1. Install dependencies with `npm install`.
-2. Copy `.env.example` to `.env.local`.
-3. Add your Supabase project URL and publishable key to `.env.local`.
-4. Run `npm run dev`, then open `http://localhost:3000`.
+- Student Authentication: Email and password authentication with institutional campus credentials powered by Supabase.
+- Marketplace Catalog: Search items by keyword, filter by categories, and browse campus listings.
+- Item Listings: Create listings with title, condition, category, description, price (INR), campus location, and photo upload.
+- Seller Management: Mark items as sold, relist active items, or permanently delete listings from the account dashboard.
+- Safe Handover Protocol: Built for in-person campus handovers with built-in safety guidelines.
+- Compliance: Privacy Policy and Terms and Conditions pages included.
 
-## Supabase setup
+## Local Setup
 
-1. Create a new Supabase project.
-2. In the Supabase SQL Editor, run `supabase/migrations/202610230001_initial_schema.sql` once.
-3. In Authentication settings, configure the Site URL for local development as `http://localhost:3000` and add appropriate redirect URLs for production later.
-4. Copy the project URL and publishable key from Supabase's API settings into `.env.local`.
-
-The migration creates the initial database, indexes, image bucket, and Row Level Security policies. Never place a Supabase service-role key in browser-accessible environment variables.
+1. Install dependencies:
+   `npm install`
+2. Create environment variables file `.env.local`:
+   `NEXT_PUBLIC_SUPABASE_URL=your-supabase-url`
+   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-supabase-anon-key`
+3. Execute SQL migrations in the Supabase SQL Editor:
+   - Run `supabase/migrations/202610230001_initial_schema.sql` (Tables, RLS policies, storage bucket)
+   - Run `supabase/migrations/202610230002_seed_data.sql` (Categories, colleges seed, storage public read access)
+4. Start the development server:
+   `npm run dev`
+5. Open `http://localhost:3000` in your web browser.
 
 ## Commands
 
-- `npm run dev` — start the development server
-- `npm run lint` — run ESLint
-- `npm run build` — make a production build
+- `npm run dev`: Start the Next.js development server
+- `npm run build`: Build optimized production bundle
+- `npm run start`: Run production server
+- `npm run lint`: Run ESLint check
 
-## Current scope
+## Custom Domain and Production Deployment Guide
 
-Implemented: visual homepage, Supabase session helpers, email/password sign-up and login screens, database foundation, RLS policies, and protected account route.
+When launching the website with a custom domain (e.g. `sortedcampus.com`):
 
-Next: profile completion, college selection, listing creation/image uploads, browse/search powered by the database, wishlist, messaging, reports, and moderation.
+1. **Deploy to Vercel or Hosting Platform:**
+   - Connect your GitHub repository to Vercel (or preferred host).
+   - In Project Settings -> Environment Variables, add:
+     - `NEXT_PUBLIC_SUPABASE_URL`
+     - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+
+2. **Connect Custom Domain:**
+   - In Vercel -> Project Settings -> Domains:
+     - Add your apex domain (e.g. `yourdomain.com`) and `www.yourdomain.com`.
+   - In your DNS provider (Cloudflare, Namecheap, GoDaddy):
+     - Add an `A` record pointing `@` to `76.76.21.21` (or provider IP).
+     - Add a `CNAME` record pointing `www` to `cname.vercel-dns.com`.
+
+3. **Update Supabase Authentication Settings:**
+   - In Supabase Dashboard -> Authentication -> URL Configuration:
+     - Update **Site URL** from `http://localhost:3000` to your production domain: `https://yourdomain.com`.
+     - In **Redirect URLs**, add: `https://yourdomain.com/**` and `https://yourdomain.com/auth/callback`.
